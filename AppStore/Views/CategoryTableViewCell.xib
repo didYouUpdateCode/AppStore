@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="177" id="U0v-6W-t6R" customClass="CategoryTableViewCell" customModule="AppleStore" customModuleProvider="target">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="177" id="U0v-6W-t6R" customClass="CategoryTableViewCell" customModule="AppStore" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="384" height="177"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="U0v-6W-t6R" id="AiF-Wv-4qE">
@@ -68,6 +68,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="collectionView" destination="YnD-Bj-wLm" id="Pdz-2h-Yyg"/>
+                <outlet property="titleLabel" destination="bg4-aL-nJu" id="GDo-aY-bzR"/>
             </connections>
             <point key="canvasLocation" x="-8" y="206.5"/>
         </tableViewCell>

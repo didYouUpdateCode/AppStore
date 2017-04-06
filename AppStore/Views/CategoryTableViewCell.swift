@@ -15,6 +15,21 @@ class CategoryTableViewCell: UITableViewCell {
     }
     
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    var name: String? {
+        didSet {
+            titleLabel.text = name
+        }
+    }
+    
+    var apps: [App]? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
+    
+    var type: String?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -31,11 +46,17 @@ class CategoryTableViewCell: UITableViewCell {
 extension CategoryTableViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return apps?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AppCollectionViewCell.identifier, for: indexPath) as! AppCollectionViewCell
+        let app = apps?[indexPath.row]
+        
+        cell.name = app?.name
+        cell.category = app?.category
+        cell.price = app?.price
+        cell.imageName = app?.imageName
         
         return cell
     }
@@ -48,7 +69,7 @@ extension CategoryTableViewCell: UICollectionViewDelegate {
 extension CategoryTableViewCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 80, height: collectionView.frame.height)
+        return CGSize(width: 100, height: collectionView.frame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
