@@ -10,7 +10,7 @@ import Foundation
 
 class AppStoreAPI {
     
-    static func fetchFeaturedApps(completionHandler: @escaping ([AppCategory]?, NSError?) -> Void) {
+    static func fetchFeaturedApps(completionHandler: @escaping (FeaturedApps?, NSError?) -> Void) {
         let url = URL(string: "https://api.letsbuildthatapp.com/appstore/featured")!
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -24,9 +24,31 @@ class AppStoreAPI {
                 } else {
                     let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as! [String: AnyObject]
                     
-                    var appCategories = [AppCategory]()
+                    var featuredApps = FeaturedApps()
+                    
+                    if let banner = json["bannerCategory"] {
+                        featuredApps.bannerCategory = AppCategory()
+                        featuredApps.bannerCategory?.name = banner["name"] as? String
+                        featuredApps.bannerCategory?.type = banner["type"] as? String
+                        featuredApps.bannerCategory?.apps = [App]()
+                        
+                        for bannerApp in banner["apps"] as! [[String: AnyObject]] {
+                            var app = App()
+                            
+                            app.id = bannerApp["Id"] as? NSNumber
+                            app.name = bannerApp["Name"] as? String
+                            app.category = bannerApp["Category"] as? String
+                            app.price = bannerApp["Price"] as? NSNumber
+                            app.imageName = bannerApp["ImageName"] as? String
+                            
+                            featuredApps.bannerCategory?.apps?.append(app)
+                        }
+                    }
+                    
                     
                     if let categories = json["categories"] {
+                        featuredApps.appCategories = [AppCategory]()
+                        
                         for category in categories as! [[String: AnyObject]] {
                             var appCategory = AppCategory()
                             
@@ -46,12 +68,12 @@ class AppStoreAPI {
                                 appCategory.apps?.append(app)
                             }
                             
-                            appCategories.append(appCategory)
+                            featuredApps.appCategories?.append(appCategory)
                         }
                     }
                     
                     DispatchQueue.main.async {
-                        completionHandler(appCategories, nil)
+                        completionHandler(featuredApps, nil)
                     }
                 }
             } catch let catchedError as NSError {
@@ -59,6 +81,6 @@ class AppStoreAPI {
                     completionHandler(nil, catchedError)
                 }
             }
-        }.resume()
+            }.resume()
     }
 }

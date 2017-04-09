@@ -9,7 +9,7 @@
 import UIKit
 
 class CategoryTableViewCell: UITableViewCell {
-
+    
     static var identifier: String {
         return "CategoryTableViewCell"
     }
@@ -38,6 +38,7 @@ class CategoryTableViewCell: UITableViewCell {
     
     func setupView() {
         collectionView.register(UINib(nibName: "AppCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: AppCollectionViewCell.identifier)
+        collectionView.register(UINib(nibName: "WideAppIconCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: WideAppIconCollectionViewCell.identifier)
         collectionView.dataSource = self
         collectionView.delegate = self
     }
@@ -50,15 +51,24 @@ extension CategoryTableViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AppCollectionViewCell.identifier, for: indexPath) as! AppCollectionViewCell
         let app = apps?[indexPath.row]
         
-        cell.name = app?.name
-        cell.category = app?.category
-        cell.price = app?.price
-        cell.imageName = app?.imageName
-        
-        return cell
+        if type == "large" {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WideAppIconCollectionViewCell.identifier, for: indexPath) as! WideAppIconCollectionViewCell
+            
+            cell.imageName = app?.imageName
+            
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AppCollectionViewCell.identifier, for: indexPath) as! AppCollectionViewCell
+            
+            cell.name = app?.name
+            cell.category = app?.category
+            cell.price = app?.price
+            cell.imageName = app?.imageName
+            
+            return cell
+        }
     }
 }
 
@@ -69,6 +79,10 @@ extension CategoryTableViewCell: UICollectionViewDelegate {
 extension CategoryTableViewCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if type == "large" {
+            return CGSize(width: collectionView.frame.width / 3 + 50, height: collectionView.frame.height - 30)
+        }
+        
         return CGSize(width: 100, height: collectionView.frame.height)
     }
     
